@@ -1,0 +1,32 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		},
+		"ignore": [
+			"node_modules/**/*",
+			".next/**/*",
+			".expo/**/*",
+			"dist/**/*",
+			"build/**/*",
+			".husky/**/*",
+			".vscode/**/*"
+		]
+	},
+	"files": {
+		"ignore": [
+			"node_modules/**/*",
+			".next/**/*",
+			".expo/**/*",
+			"dist/**/*",
+			"build/**/*",
+			".husky/**/*",
+			".vscode/**/*"
+		]
+	}
+}
