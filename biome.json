@@ -3,30 +3,19 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"javascript": {
+		"parser": {
+      "unsafeParameterDecoratorsEnabled": true
+    }
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
-		},
-		"ignore": [
-			"node_modules/**/*",
-			".next/**/*",
-			".expo/**/*",
-			"dist/**/*",
-			"build/**/*",
-			".husky/**/*",
-			".vscode/**/*"
-		]
-	},
-	"files": {
-		"ignore": [
-			"node_modules/**/*",
-			".next/**/*",
-			".expo/**/*",
-			"dist/**/*",
-			"build/**/*",
-			".husky/**/*",
-			".vscode/**/*"
-		]
+			"recommended": true,
+			"style": {
+				"useImportType": "off"
+			},
+			"complexity": {"noUselessConstructor": "off"}
+		}
 	}
 }

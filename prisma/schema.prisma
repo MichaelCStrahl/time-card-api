@@ -16,7 +16,7 @@ datasource db {
 model User {
   id        String     @id @default(uuid())
   name      String
-  ref       String
+  ref       String     @unique
   timeCards TimeCard[]
 
   @@map("users")
