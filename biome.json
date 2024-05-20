@@ -5,8 +5,8 @@
 	},
 	"javascript": {
 		"parser": {
-      "unsafeParameterDecoratorsEnabled": true
-    }
+			"unsafeParameterDecoratorsEnabled": true
+		}
 	},
 	"linter": {
 		"enabled": true,
@@ -15,7 +15,9 @@
 			"style": {
 				"useImportType": "off"
 			},
-			"complexity": {"noUselessConstructor": "off"}
+			"complexity": {
+				"noUselessConstructor": "off"
+			}
 		}
 	}
 }

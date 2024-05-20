@@ -1,19 +1,13 @@
+import { GetUserByRefUseCase } from "@/application/use-case/get-user-by-ref";
 import { Controller, Get, NotFoundException, Param } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
 
 @Controller("/users/:ref")
 export class GetUserByRefController {
-	constructor(private prisma: PrismaService) {}
+	constructor(private getUserByRef: GetUserByRefUseCase) {}
 
 	@Get()
 	async handle(@Param("ref") ref: string) {
-		const user = await this.prisma.user.findFirst({
-			where: {
-				ref: {
-					equals: ref,
-				},
-			},
-		});
+		const { user } = await this.getUserByRef.execute({ ref });
 
 		if (!user) {
 			throw new NotFoundException();

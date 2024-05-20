@@ -1,8 +1,7 @@
+import { envSchema } from "@/env";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { GetUserByRefController } from "./controllers/get-user-by-ref.controller";
-import { envSchema } from "./env";
-import { PrismaService } from "./prisma/prisma.service";
+import { HttpModule } from "./http/http.module";
 
 @Module({
 	imports: [
@@ -10,8 +9,7 @@ import { PrismaService } from "./prisma/prisma.service";
 			validate: (env) => envSchema.parse(env),
 			isGlobal: true,
 		}),
+		HttpModule,
 	],
-	controllers: [GetUserByRefController],
-	providers: [PrismaService],
 })
 export class AppModule {}
