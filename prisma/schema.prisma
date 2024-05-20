@@ -23,10 +23,10 @@ model User {
 }
 
 model TimeCard {
-  id        String   @id @default(uuid())
-  startDate DateTime @map("start_date")
-  endDate   DateTime @map("end_date")
-  userId    String   @map("user_id")
+  id        String    @id @default(uuid())
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
+  userId    String    @map("user_id")
 
   user User @relation(fields: [userId], references: [id])
 

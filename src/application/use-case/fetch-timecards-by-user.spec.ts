@@ -1,18 +1,18 @@
 import { randomUUID } from "node:crypto";
-import { InMemoryTimeCardsRepository } from "test/repositories/in-memory-timecards-repository";
+import { InMemoryTimecardsRepository } from "test/repositories/in-memory-timecards-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { generateRef } from "util/generate-ref";
-import { FetchTimeCardsUseCase } from "./fetch-timecards-by-user";
+import { FetchTimecardsUseCase } from "./fetch-timecards-by-user";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
-let inMemoryTimeCardsRepository: InMemoryTimeCardsRepository;
-let sut: FetchTimeCardsUseCase;
+let inMemoryTimecardsRepository: InMemoryTimecardsRepository;
+let sut: FetchTimecardsUseCase;
 
 describe("Fetch TimeCards By User Id", () => {
 	beforeEach(() => {
 		inMemoryUsersRepository = new InMemoryUsersRepository();
-		inMemoryTimeCardsRepository = new InMemoryTimeCardsRepository();
-		sut = new FetchTimeCardsUseCase(inMemoryTimeCardsRepository);
+		inMemoryTimecardsRepository = new InMemoryTimecardsRepository();
+		sut = new FetchTimecardsUseCase(inMemoryTimecardsRepository);
 	});
 
 	it("should be able to get time cards by user id", async () => {
@@ -34,7 +34,7 @@ describe("Fetch TimeCards By User Id", () => {
 			endDate: new Date(),
 		};
 
-		inMemoryTimeCardsRepository.items.push(fakerTimeCard);
+		inMemoryTimecardsRepository.items.push(fakerTimeCard);
 
 		const result = await sut.execute({
 			userId,

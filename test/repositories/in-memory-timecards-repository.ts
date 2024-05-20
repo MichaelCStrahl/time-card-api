@@ -1,8 +1,8 @@
-import { TimeCardsRepository } from "@/application/repositories/timecard-repository";
+import { TimecardsRepository } from "@/application/repositories/timecard-repository";
 import { Injectable } from "@nestjs/common";
 import { TimeCard } from "@prisma/client";
 
-export class InMemoryTimeCardsRepository extends TimeCardsRepository {
+export class InMemoryTimecardsRepository extends TimecardsRepository {
 	public items: TimeCard[] = [];
 
 	async findManyByUserId(userId: string) {

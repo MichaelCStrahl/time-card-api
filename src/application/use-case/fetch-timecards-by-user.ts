@@ -1,20 +1,22 @@
+import { Injectable } from "@nestjs/common";
 import { TimeCard } from "@prisma/client";
-import { TimeCardsRepository } from "../repositories/timecard-repository";
+import { TimecardsRepository } from "../repositories/timecard-repository";
 
-interface FetchTimeCardsUseCaseRequest {
+interface FetchTimecardsUseCaseRequest {
 	userId: string;
 }
 
-interface FetchTimeCardsUseCaseResponse {
+interface FetchTimecardsUseCaseResponse {
 	timeCards: TimeCard[] | null;
 }
 
-export class FetchTimeCardsUseCase {
-	constructor(private timeCardsRepository: TimeCardsRepository) {}
+@Injectable()
+export class FetchTimecardsUseCase {
+	constructor(private timeCardsRepository: TimecardsRepository) {}
 
 	async execute({
 		userId,
-	}: FetchTimeCardsUseCaseRequest): Promise<FetchTimeCardsUseCaseResponse> {
+	}: FetchTimecardsUseCaseRequest): Promise<FetchTimecardsUseCaseResponse> {
 		const timeCards = await this.timeCardsRepository.findManyByUserId(userId);
 
 		return { timeCards };
