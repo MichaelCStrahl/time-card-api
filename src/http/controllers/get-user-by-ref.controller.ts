@@ -7,14 +7,10 @@ export class GetUserByRefController {
 
 	@Get()
 	async handle(@Param("ref") ref: string) {
-		const { user, currentTimeWork } = await this.getUserByRef.execute({ ref });
+		const { user } = await this.getUserByRef.execute({ ref });
 
 		if (!user) {
 			throw new NotFoundException();
-		}
-
-		if (currentTimeWork) {
-			return { user, currentTimeWork };
 		}
 
 		return { user };

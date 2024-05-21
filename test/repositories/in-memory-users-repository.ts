@@ -1,5 +1,4 @@
 import { UsersRepository } from "@/application/repositories/users-repository";
-import { Injectable } from "@nestjs/common";
 import { User } from "@prisma/client";
 
 export class InMemoryUsersRepository extends UsersRepository {
