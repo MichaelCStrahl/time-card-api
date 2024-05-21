@@ -19,7 +19,6 @@ export class PrismaTimecardsRepository extends TimecardsRepository {
 				},
 				endDate: {
 					not: null,
-					lt: new Date(),
 				},
 			},
 			orderBy: {

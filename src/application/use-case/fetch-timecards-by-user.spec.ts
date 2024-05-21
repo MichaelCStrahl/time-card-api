@@ -3,6 +3,7 @@ import { InMemoryTimecardsRepository } from "test/repositories/in-memory-timecar
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { calculateTimeDifference } from "util/difference-between-dates";
 import { generateRef } from "util/generate-ref";
+import { isSortedDates } from "util/is-sorted-dates";
 import { FetchTimecardsUseCase } from "./fetch-timecards-by-user";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
@@ -74,26 +75,20 @@ describe("Fetch TimeCards By User Id", () => {
 
 		inMemoryUsersRepository.items.push(fakerUser);
 
-		const startDate1 = new Date(2024, 3, 20, 8, 0, 0);
-		const endDate1 = new Date(2024, 3, 20, 18, 0, 0);
-
 		const fakerTimeCard1 = {
 			id: randomUUID().toString(),
 			userId,
-			startDate: startDate1,
-			endDate: endDate1,
+			startDate: new Date(2024, 3, 20, 8, 0, 0),
+			endDate: new Date(2024, 3, 20, 18, 0, 0),
 		};
 
 		inMemoryTimecardsRepository.items.push(fakerTimeCard1);
 
-		const startDate2 = new Date(2024, 3, 21, 8, 0, 0);
-		const endDate2 = new Date(2024, 3, 21, 18, 0, 0);
-
 		const fakerTimeCard2 = {
 			id: randomUUID().toString(),
 			userId,
-			startDate: startDate2,
-			endDate: endDate2,
+			startDate: new Date(2024, 3, 21, 8, 0, 0),
+			endDate: new Date(2024, 3, 21, 18, 0, 0),
 		};
 
 		inMemoryTimecardsRepository.items.push(fakerTimeCard2);
@@ -102,22 +97,58 @@ describe("Fetch TimeCards By User Id", () => {
 			userId,
 		});
 
+		const datesHasSorted = isSortedDates(result.timeCards);
+
 		expect(result.timeCards).toHaveLength(2);
-		expect(result.timeCards).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({
-					id: fakerTimeCard2.id,
-					hoursWorked: expect.any(String),
-					startDayWorked: expect.any(Date),
-					userId: fakerTimeCard2.userId,
-				}),
-				expect.objectContaining({
-					id: fakerTimeCard1.id,
-					hoursWorked: expect.any(String),
-					startDayWorked: expect.any(Date),
-					userId: fakerTimeCard1.userId,
-				}),
-			]),
-		);
+		expect(datesHasSorted).toBeTruthy();
+	});
+
+	it("should not be able to get a current time card", async () => {
+		const userRef = generateRef(7);
+		const userId = randomUUID().toString();
+
+		const fakerUser = {
+			id: userId,
+			name: "John",
+			ref: userRef,
+		};
+
+		inMemoryUsersRepository.items.push(fakerUser);
+
+		const fakerTimeCard1 = {
+			id: randomUUID().toString(),
+			userId,
+			startDate: new Date(2024, 3, 20, 8, 0, 0),
+			endDate: new Date(2024, 3, 20, 18, 0, 0),
+		};
+
+		inMemoryTimecardsRepository.items.push(fakerTimeCard1);
+
+		const fakerTimeCard2 = {
+			id: randomUUID().toString(),
+			userId,
+			startDate: new Date(2024, 3, 21, 8, 0, 0),
+			endDate: new Date(2024, 3, 21, 18, 0, 0),
+		};
+
+		inMemoryTimecardsRepository.items.push(fakerTimeCard2);
+
+		const fakerTimeCardCurrent = {
+			id: randomUUID().toString(),
+			userId,
+			startDate: new Date(),
+			endDate: null,
+		};
+
+		inMemoryTimecardsRepository.items.push(fakerTimeCardCurrent);
+
+		const result = await sut.execute({
+			userId,
+		});
+
+		const timeCardItems = inMemoryTimecardsRepository.items;
+
+		expect(result.timeCards).toHaveLength(2);
+		expect(timeCardItems).toHaveLength(3);
 	});
 });

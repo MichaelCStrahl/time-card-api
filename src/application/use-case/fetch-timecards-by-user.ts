@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { TimeCard } from "@prisma/client";
 import { TimecardsRepository } from "../repositories/timecard-repository";
 
 export interface HoursWorked {

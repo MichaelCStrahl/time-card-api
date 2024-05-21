@@ -13,18 +13,15 @@ export class InMemoryTimecardsRepository extends TimecardsRepository {
 			(item) => item.userId === userId,
 		);
 
-		const userTimesLTToday = timeCardsByUserId.filter((item) => {
-			const hasStartDateLTToday = item.startDate < today;
-			const hasEndDateAndLTToday = item.endDate && item.endDate < today;
-
-			return hasStartDateLTToday && hasEndDateAndLTToday;
+		const userTimesWorkedLessThanToday = timeCardsByUserId.filter((item) => {
+			return item.startDate < today;
 		});
 
-		if (!userTimesLTToday) {
+		if (!userTimesWorkedLessThanToday.length) {
 			return null;
 		}
 
-		const hoursWorked = userTimesLTToday.map((timeCard) => {
+		const hoursWorked = userTimesWorkedLessThanToday.map((timeCard) => {
 			const timeWorked = calculateTimeDifference({
 				endDate: timeCard.endDate as Date,
 				startDate: timeCard.startDate,

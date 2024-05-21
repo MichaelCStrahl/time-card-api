@@ -4,6 +4,7 @@ import { PrismaService } from "@/prisma/prisma.service";
 import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
+import { isSortedDates } from "util/is-sorted-dates";
 
 describe("Fetch Time Cards By User Id", () => {
 	let app: INestApplication;
@@ -28,24 +29,37 @@ describe("Fetch Time Cards By User Id", () => {
 			},
 		});
 
-		const startDate = new Date(2024, 4, 20, 8, 0, 0);
-		const endDate = new Date(2024, 4, 20, 18, 0, 0);
+		const fakerTimeCard1 = {
+			userId: user.id,
+			startDate: new Date(2024, 4, 20, 8, 0, 0),
+			endDate: new Date(2024, 4, 20, 18, 0, 0),
+		};
 
-		await prisma.timeCard.create({
-			data: {
-				userId: user.id,
-				startDate,
-				endDate,
-			},
+		const fakerTimeCard2 = {
+			userId: user.id,
+			startDate: new Date(2024, 3, 21, 8, 0, 0),
+			endDate: new Date(2024, 3, 21, 18, 0, 0),
+		};
+
+		const fakerTimeCardCurrent = {
+			userId: user.id,
+			startDate: new Date(),
+			endDate: null,
+		};
+
+		await prisma.timeCard.createMany({
+			data: [fakerTimeCard1, fakerTimeCard2, fakerTimeCardCurrent],
 		});
 
 		const response = await request(app.getHttpServer())
 			.get(`/timecards/${user.id}`)
 			.send();
 
-		expect(response.status).toBe(200);
-		expect(response.body.timeCards).toHaveLength(1);
+		const datesHasSorted = isSortedDates(response.body.timeCards);
 
+		expect(response.status).toBe(200);
+		expect(response.body.timeCards).toHaveLength(2);
+		expect(datesHasSorted).toBeTruthy();
 		expect(response.body).toEqual({
 			timeCards: expect.arrayContaining([
 				expect.objectContaining({
