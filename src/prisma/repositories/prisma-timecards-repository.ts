@@ -59,17 +59,8 @@ export class PrismaTimecardsRepository extends TimecardsRepository {
 				userId,
 				startDate: {
 					gte: startOfDay,
+					lte: endOfDay,
 				},
-				OR: [
-					{
-						endDate: null,
-					},
-					{
-						endDate: {
-							lte: endOfDay,
-						},
-					},
-				],
 			},
 		});
 

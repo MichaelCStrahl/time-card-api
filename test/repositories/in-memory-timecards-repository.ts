@@ -47,20 +47,18 @@ export class InMemoryTimecardsRepository extends TimecardsRepository {
 	}
 
 	async findRecentTimecardByUserId(userId: string) {
-		const today = dayjs().startOf("day").toDate();
+		const today = dayjs().startOf("day");
 
-		const timeCard = this.items.find((item) => {
-			const startDate = new Date(item.startDate);
-			const hasSomeDay = startDate.getDay() === today.getDay();
-
-			return item.userId === userId && hasSomeDay;
+		const recentTimeCard = this.items.find((item) => {
+			const startDate = dayjs(item.startDate);
+			return item.userId === userId && startDate.isSame(today, "day");
 		});
 
-		if (!timeCard) {
+		if (!recentTimeCard) {
 			return null;
 		}
 
-		return timeCard;
+		return recentTimeCard;
 	}
 
 	async updateTimecard(id: string) {
