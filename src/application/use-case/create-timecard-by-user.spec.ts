@@ -2,24 +2,20 @@ import { randomUUID } from "node:crypto";
 import { InMemoryTimecardsRepository } from "test/repositories/in-memory-timecards-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { generateRef } from "util/generate-ref";
-import { GetUserByRefUseCase } from "./get-user-by-ref";
+import { CreateTimecardByUserUseCase } from "./create-timecard-by-user";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryTimecardsRepository: InMemoryTimecardsRepository;
-let sut: GetUserByRefUseCase;
+let sut: CreateTimecardByUserUseCase;
 
-describe("Get User By Ref", () => {
+describe("Create Time Card By User", () => {
 	beforeEach(() => {
 		inMemoryUsersRepository = new InMemoryUsersRepository();
 		inMemoryTimecardsRepository = new InMemoryTimecardsRepository();
-
-		sut = new GetUserByRefUseCase(
-			inMemoryUsersRepository,
-			inMemoryTimecardsRepository,
-		);
+		sut = new CreateTimecardByUserUseCase(inMemoryTimecardsRepository);
 	});
 
-	it("should be able to get a user by ref", async () => {
+	it("should be able create a new time card with user id", async () => {
 		const userRef = generateRef(7);
 		const userId = randomUUID().toString();
 
@@ -31,41 +27,42 @@ describe("Get User By Ref", () => {
 
 		inMemoryUsersRepository.items.push(fakerUser);
 
-		const result = await sut.execute({
-			ref: userRef,
-		});
-
-		expect(result.user).toEqual(fakerUser);
-	});
-
-	it("should be able to get a user by ref with current time work uncompleted", async () => {
-		const userRef = generateRef(7);
-		const userId = randomUUID().toString();
-
-		const fakerUser = {
-			id: userId,
-			name: "John",
-			ref: userRef,
-		};
-
-		inMemoryUsersRepository.items.push(fakerUser);
-
-		const startDate = new Date();
-
-		const fakerTimeCard = {
-			id: randomUUID().toString(),
+		await sut.execute({
 			userId,
-			startDate,
-			endDate: null,
-		};
-
-		inMemoryTimecardsRepository.items.push(fakerTimeCard);
-
-		const result = await sut.execute({
-			ref: userRef,
 		});
 
-		expect(result.user).toEqual(fakerUser);
-		expect(result.currentTimeWork).toEqual(fakerTimeCard);
+		const createdTimeCard = inMemoryTimecardsRepository.items[0];
+		const today = new Date();
+
+		expect(inMemoryTimecardsRepository.items[0]).toEqual({
+			id: expect.any(String),
+			userId,
+			startDate: expect.any(Date),
+			endDate: null,
+		});
+		expect(createdTimeCard.startDate.getDay()).toBe(today.getDay());
+	});
+
+	it("should not be able create a new time card if exist a current time card", async () => {
+		const userRef = generateRef(7);
+		const userId = randomUUID().toString();
+
+		const fakerUser = {
+			id: userId,
+			name: "John",
+			ref: userRef,
+		};
+
+		inMemoryUsersRepository.items.push(fakerUser);
+
+		await sut.execute({
+			userId,
+		});
+
+		await expect(() =>
+			sut.execute({
+				userId,
+			}),
+		).rejects.toBeInstanceOf(Error);
 	});
 });

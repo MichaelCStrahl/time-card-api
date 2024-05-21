@@ -7,3 +7,8 @@ GET {{baseUrl}}/users/4SXXFMF
 
 # @name fetchTimecardsByUser
 GET {{baseUrl}}/timecards/225d0037-2be0-4106-a0d0-6498a6db2750
+
+###
+
+# @name createTimecardByUser
+PATCH {{baseUrl}}/timecards/225d0037-2be0-4106-a0d0-6498a6db2750/create

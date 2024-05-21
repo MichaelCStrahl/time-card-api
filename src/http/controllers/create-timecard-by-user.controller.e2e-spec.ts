@@ -5,7 +5,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import request from "supertest";
 
-describe("Fetch Time Cards By User Id", () => {
+describe("Create time card by user (E2E)", () => {
 	let app: INestApplication;
 	let prisma: PrismaService;
 
@@ -19,7 +19,7 @@ describe("Fetch Time Cards By User Id", () => {
 		await app.init();
 	});
 
-	test("[GET] /timecards/:id", async () => {
+	test("[PATCH] /timecards/:id/create", async () => {
 		const userRef = "4SXXFMF";
 		const user = await prisma.user.create({
 			data: {
@@ -28,33 +28,10 @@ describe("Fetch Time Cards By User Id", () => {
 			},
 		});
 
-		const startDate = new Date(2024, 4, 20, 8, 0, 0);
-		const endDate = new Date(2024, 4, 20, 18, 0, 0);
-
-		await prisma.timeCard.create({
-			data: {
-				userId: user.id,
-				startDate,
-				endDate,
-			},
-		});
-
 		const response = await request(app.getHttpServer())
-			.get(`/timecards/${user.id}`)
+			.patch(`/timecards/${user.id}/create`)
 			.send();
 
-		expect(response.status).toBe(200);
-		expect(response.body.timeCards).toHaveLength(1);
-
-		expect(response.body).toEqual({
-			timeCards: expect.arrayContaining([
-				expect.objectContaining({
-					id: expect.any(String),
-					hoursWorked: expect.any(String),
-					startDayWorked: expect.any(String),
-					userId: user.id,
-				}),
-			]),
-		});
+		expect(response.status).toBe(204);
 	});
 });

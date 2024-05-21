@@ -19,14 +19,12 @@ interface FetchTimecardsUseCaseResponse {
 
 @Injectable()
 export class FetchTimecardsUseCase {
-	constructor(private timeCardsRepository: TimecardsRepository) {}
+	constructor(private timecardsRepository: TimecardsRepository) {}
 
 	async execute({
 		userId,
 	}: FetchTimecardsUseCaseRequest): Promise<FetchTimecardsUseCaseResponse> {
-		const timeCards = await this.timeCardsRepository.findManyByUserId(userId);
-
-		console.log(timeCards);
+		const timeCards = await this.timecardsRepository.findManyByUserId(userId);
 
 		return { timeCards };
 	}

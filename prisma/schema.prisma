@@ -24,7 +24,7 @@ model User {
 
 model TimeCard {
   id        String    @id @default(uuid())
-  startDate DateTime? @map("start_date")
+  startDate DateTime  @map("start_date")
   endDate   DateTime? @map("end_date")
   userId    String    @map("user_id")
 
