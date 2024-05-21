@@ -1,6 +1,6 @@
 import { CreateTimecardByUserUseCase } from "@/application/use-case/create-timecard-by-user";
 import { FetchTimecardsUseCase } from "@/application/use-case/fetch-timecards-by-user";
-import { FinishTimeCardByUserUseCase } from "@/application/use-case/finish-timecard-by-user";
+import { FinishTimecardByUserUseCase } from "@/application/use-case/finish-timecard-by-user";
 import { GetCurrentTimecardUseCase } from "@/application/use-case/get-current-time-card";
 import { GetUserByRefUseCase } from "@/application/use-case/get-user-by-ref";
 import { DatabaseModule } from "@/prisma/database.module";
@@ -24,7 +24,7 @@ import { GetUserByRefController } from "./controllers/get-user-by-ref.controller
 		GetUserByRefUseCase,
 		FetchTimecardsUseCase,
 		CreateTimecardByUserUseCase,
-		FinishTimeCardByUserUseCase,
+		FinishTimecardByUserUseCase,
 		GetCurrentTimecardUseCase,
 	],
 })
