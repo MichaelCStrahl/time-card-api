@@ -41,11 +41,11 @@ describe("Get current time card by user id (E2E)", () => {
 			endDate: new Date(2024, 3, 21, 18, 0, 0),
 		};
 
-		const createStartDate = new Date();
+		const today = dayjs();
 
 		const fakerTimeCardCurrent = {
 			userId: user.id,
-			startDate: createStartDate,
+			startDate: today.toDate(),
 			endDate: null,
 		};
 
@@ -57,11 +57,13 @@ describe("Get current time card by user id (E2E)", () => {
 			.get(`/timecards/${user.id}/current`)
 			.send();
 
+		const startOfDay = today.startOf("day").toDate();
+
 		const getPrismaCurrentTimeCard = await prisma.timeCard.findFirst({
 			where: {
 				userId: user.id,
 				startDate: {
-					gte: createStartDate,
+					gte: startOfDay,
 				},
 			},
 		});

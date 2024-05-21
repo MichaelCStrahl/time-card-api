@@ -1,16 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { TimecardsRepository } from "../repositories/timecard-repository";
-import { UsersRepository } from "../repositories/users-repository";
 
-interface FinishTimeCardByUserUseCaseRequest {
+interface FinishTimecardByUserUseCaseRequest {
 	userId: string;
 }
 
 @Injectable()
-export class FinishTimeCardByUserUseCase {
+export class FinishTimecardByUserUseCase {
 	constructor(private timecardsRepository: TimecardsRepository) {}
 
-	async execute({ userId }: FinishTimeCardByUserUseCaseRequest) {
+	async execute({ userId }: FinishTimecardByUserUseCaseRequest) {
 		const currentTimeCard =
 			await this.timecardsRepository.findRecentTimecardByUserId(userId);
 

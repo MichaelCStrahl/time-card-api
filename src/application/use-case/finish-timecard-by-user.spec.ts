@@ -2,18 +2,18 @@ import { randomUUID } from "node:crypto";
 import { InMemoryTimecardsRepository } from "test/repositories/in-memory-timecards-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { generateRef } from "util/generate-ref";
-import { FinishTimeCardByUserUseCase } from "./finish-timecard-by-user";
+import { FinishTimecardByUserUseCase } from "./finish-timecard-by-user";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
 let inMemoryTimecardsRepository: InMemoryTimecardsRepository;
-let sut: FinishTimeCardByUserUseCase;
+let sut: FinishTimecardByUserUseCase;
 
 describe("Finish Time Card By User", () => {
 	beforeEach(() => {
 		inMemoryUsersRepository = new InMemoryUsersRepository();
 		inMemoryTimecardsRepository = new InMemoryTimecardsRepository();
 
-		sut = new FinishTimeCardByUserUseCase(inMemoryTimecardsRepository);
+		sut = new FinishTimecardByUserUseCase(inMemoryTimecardsRepository);
 	});
 
 	it("should be able to finish time card by user", async () => {
@@ -51,7 +51,6 @@ describe("Finish Time Card By User", () => {
 			endDate: expect.any(Date),
 		});
 		expect(hasEndDate).toBe(true);
-
 		if (hasEndDate) {
 			expect(createdTimeCard.startDate.getDay()).toBe(
 				createdTimeCard.endDate?.getDay(),

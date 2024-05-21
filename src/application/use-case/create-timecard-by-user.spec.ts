@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import dayjs from "dayjs";
 import { InMemoryTimecardsRepository } from "test/repositories/in-memory-timecards-repository";
 import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
 import { generateRef } from "util/generate-ref";
@@ -34,13 +35,15 @@ describe("Create Time Card By User", () => {
 		const createdTimeCard = inMemoryTimecardsRepository.items[0];
 		const today = new Date();
 
+		const isSameDates = dayjs(createdTimeCard.startDate).isSame(today);
+
 		expect(inMemoryTimecardsRepository.items[0]).toEqual({
 			id: expect.any(String),
 			userId,
 			startDate: expect.any(Date),
 			endDate: null,
 		});
-		expect(createdTimeCard.startDate.getDay()).toBe(today.getDay());
+		expect(isSameDates).toBeTruthy();
 	});
 
 	it("should not be able create a new time card if exist a current time card", async () => {
