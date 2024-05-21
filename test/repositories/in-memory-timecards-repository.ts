@@ -66,6 +66,19 @@ export class InMemoryTimecardsRepository extends TimecardsRepository {
 		return timeCard;
 	}
 
+	async updateTimecard(id: string) {
+		const timeCardIndex = this.items.findIndex((item) => item.id === id);
+
+		const timeCard = this.items[timeCardIndex];
+
+		const updatedTimeCard = {
+			...timeCard,
+			endDate: new Date(),
+		};
+
+		this.items[timeCardIndex] = updatedTimeCard;
+	}
+
 	async create(userId: string) {
 		this.items.push({
 			id: randomUUID(),

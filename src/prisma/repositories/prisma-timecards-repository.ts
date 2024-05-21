@@ -77,6 +77,17 @@ export class PrismaTimecardsRepository extends TimecardsRepository {
 		return timeCard;
 	}
 
+	async updateTimecard(id: string) {
+		await this.prisma.timeCard.update({
+			where: {
+				id,
+			},
+			data: {
+				endDate: new Date(),
+			},
+		});
+	}
+
 	async create(userId: string) {
 		await this.prisma.timeCard.create({
 			data: {
